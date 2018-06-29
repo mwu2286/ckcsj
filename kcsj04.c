@@ -1,7 +1,6 @@
 #include<stdio.h>
 #include<string.h>
 #include<iostream.h>
-#include<windows.h>
 
     int n=0,i=0,j=0,num;
 	int gonghao[10];
@@ -20,13 +19,10 @@
 		float shi;//实发工资
 }zggza[200],zggzb[200],*p,*q;
 
-
 void read()
 {	
-	
-	int ch;
     FILE *fp;
-if((fp=fopen("gx.dat","rb"))==NULL)	//文件打开失败
+if((fp=fopen("gx.dat","r"))==NULL)	//文件打开失败
 {
 	printf("文件打开失败！\n");
 	exit(-1);
@@ -34,10 +30,16 @@ if((fp=fopen("gx.dat","rb"))==NULL)	//文件打开失败
 }
 else
     printf("文件打开成功！\n");
-	    for(n=0;n<1;n++)
+		rewind(fp);
+	    do
 		{
-		fscanf(fp,"%s%s%f%f%f%f%f%f%f\n",zggza[n].num,zggza[n].name,zggza[n].gang,zggza[n].xin,zggza[n].zhi,zggza[n].ji,zggza[n].ying,zggza[n].ge,zggza[n].shi);
-		printf("zggza[n].num=%s,zggza[n].name=%s,zggza[n].gang=%f,zggza[n].xin=%f,zggza[n].zhi=%f,zggza[n].ji=%f,zggza[n].ying=%f,zggza[n].ge=%f,zggza[n].shi=%f\n",zggza[n].num,zggza[n].name,zggza[n].gang,zggza[n].xin,zggza[n].zhi,zggza[n].ji,zggza[n].ying,zggza[n].ge,zggza[n].shi);
+		fscanf(fp,"%[^,],%[^,],%f,%f,%f,%f,%f,%f,%f",&zggza[n].num,&zggza[n].name,&zggza[n].gang,&zggza[n].xin,&zggza[n].zhi,&zggza[n].ji,&zggza[n].ying,&zggza[n].ge,&zggza[n].shi);
+		n++;
+		}while(!feof(fp));
+		i=n;
+		for(n=0;n<i;n++)
+		{
+		printf("%s,%s,%f,%f,%f,%f,%f,%f,%f\n",zggza[n].num,zggza[n].name,zggza[n].gang,zggza[n].xin,zggza[n].zhi,zggza[n].ji,zggza[n].ying,zggza[n].ge,zggza[n].shi);
 		}
 		fclose(fp);
 }
@@ -59,16 +61,15 @@ void find()    //查询
 {	
 	int ch;
 	FILE *fp;
-	p=zggza;
 	printf("请输入工号！\n");
 	scanf("%d","&gonggao");
+	ch=gonghao;
 	do
 	{   n=0;
-		ch=zggza[i].num;
-		fscanf(fp,"%s%s%f%f%f%f%f%f%f\n",zggza[n].num,zggza[n].name,zggza[n].gang,zggza[n].xin,zggza[n].zhi,zggza[n].ji,zggza[n].ying,zggza[n].ge,zggza[n].shi);
+		fscanf(fp,"%[^,],%[^,],%f,%f,%f,%f,%f,%f,%f\n",&zggza[n].num,&zggza[n].name,&zggza[n].gang,&zggza[n].xin,&zggza[n].zhi,&zggza[n].ji,&zggza[n].ying,&zggza[n].ge,&zggza[n].shi);
 		n++;
-	}while(ch=gonghao[10]);
-printf("%d""zggza[n-1]");
+	}while(ch=zggza[n].num);
+	    printf("%s,%s,%f,%f,%f,%f,%f,%f,%f\n",zggza[n].num,zggza[n].name,zggza[n].gang,zggza[n].xin,zggza[n].zhi,zggza[n].ji,zggza[n].ying,zggza[n].ge,zggza[n].shi);
 }
 
 void list()	//浏览
@@ -175,37 +176,25 @@ void grsds(double sum)//计算个人所得税
 
 int main() 
 {	
+	int grade;
 	read();
 	printf("请选择对应数字实现其代表的功能\n1.查询 2.修改 3.添加\n4.删除 5.保存 6.浏览\n7.退出\n");
-	scanf("%d",&num);
-	if(num=1)
+	scanf("%d",&grade);
+	switch(grade)
 	{
-		find();
+	case 1:
+	{
+	    find();break;
 	}
-	else if(num=2)
+	case 2:
 	{
-		modift();
+	    modift();break;
 	}
-	else if(num=3)
+	case 3:
 	{
-		add();
+	    add();break;
 	}
-	else if(num=4)
-	{
-		del();
-	}
-	else if(num=5)
-	{
-		write();
-	}
-	else if(num=6)
-	{
-		read();
-	}
-	else
-	{
 	}
 	return 0;
-
 }
 	
